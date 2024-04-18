@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    networks:
+      - my_network
+    ports:
+      - "3001:3001"
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/mydatabase
+    depends_on:
+      - mongo
+    networks:
+      - my_network
+    ports:
+      - "3030:3030"
+
+  mongo:
+    image: mongo
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
